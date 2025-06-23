@@ -7,6 +7,7 @@
 | Aslam Ahmad Usman |  5027241074  |
 | Tiara Fatimah Azzahra  |  5027241090 |
 | Raya Ahmad Syarif  | 5027241041  |
+| Mutiara Diva Jaladitha  | 5027241083  |
 
 <ul>
   <li><a href="#bagian1">1. Pengantar Library dan Implementasi Kelas Rute</a></li>
@@ -272,8 +273,113 @@ Fungsi lalu akan mengecek apakah lokasi memiliki rute keluar atau tidak. Jika lo
 </li>
 </ul>
 
-<h2 id="bagian3">3. bagian saha</h2>
-<!-- Konten bagian 3 -->
+<h3>3. Fitur Update</h3>
+
+Tujuan: Mengganti nama lokasi berdasarkan ID-nya.
+
+```
+    void updateLokasi(int id, const string& namaBaru) {
+        if (daftarLokasi.find(id) != daftarLokasi.end()) {
+            daftarLokasi.at(id).nama = namaBaru;
+            cout << "SUCCESS: Lokasi ID " << id << " berhasil diperbarui menjadi '" << namaBaru << "'.\n";
+        } else {
+            cout << "ERROR: Lokasi dengan ID " << id << " tidak ditemukan.\n";
+        }
+    }
+```
+- `if (daftarLokasi.find(id) != daftarLokasi.end())` : Mengecek apakah ID lokasi ada di `daftarLokasi`.
+- `daftarLokasi.at(id).nama = namaBaru;` : Jika ada, ganti nama lokasinya.
+- `cout << "SUCCESS: Lokasi ID " << id << " berhasil diperbarui...";` : Output keberhasilan atau error jika tidak ditemukan.
+
+<h3>4. Fitur Delete</h3>
+
+<h3>4.1  hapusLokasi</h3>
+
+Tujuan: Menghapus lokasi beserta semua rute yang menuju ke/dari lokasi itu.
+
+```
+ bool hapusLokasi(int id) {
+        if (daftarLokasi.find(id) == daftarLokasi.end()) {
+            cout << "ERROR: Lokasi dengan ID " << id << " tidak ditemukan.\n";
+            return false;
+        }
+        string namaLokasi = daftarLokasi.at(id).nama;
+        daftarLokasi.erase(id);
+        adjacencyList.erase(id);
+        for (auto& pair : adjacencyList) {
+            auto& ruteVector = pair.second;
+            ruteVector.erase(
+                remove_if(ruteVector.begin(), ruteVector.end(),
+                                  [id](const Rute& rute) { return rute.idLokasiTujuan == id; }),
+                ruteVector.end()
+            );
+        }
+        cout << "SUCCESS: Lokasi '" << namaLokasi << "' (ID: " << id << ") dan semua rute terkait telah dihapus.\n";
+        return true;
+    }
+```
+- `if (daftarLokasi.find(id) == daftarLokasi.end())` : Cek apakah ID ada. Kalau tidak, cetak error dan return `false`.
+- `string namaLokasi = daftarLokasi.at(id).nama; daftarLokasi.erase(id); adjacencyList.erase(id);` : Hapus dari `daftarLokasi` dan semua rute keluar dari lokasi itu.
+- `for (auto& pair : adjacencyList) {...}` : Hapus semua rute menuju ke ID ini dari semua lokasi lain.
+- `cout << "SUCCESS: Lokasi '" << namaLokasi << "'... dan semua rute terkait telah dihapus.";` : Cetak keberhasilan.
+
+<h3>4.2  hapusRute</h3>
+
+Tujuan: Menghapus satu rute spesifik dari `idAwal` ke `idTujuan`.
+
+```
+ bool hapusRute(int idAwal, int idTujuan) {
+        if (adjacencyList.find(idAwal) == adjacencyList.end()) {
+            cout << "ERROR: Lokasi awal dengan ID " << idAwal << " tidak ditemukan.\n";
+            return false;
+        }
+        auto& ruteVector = adjacencyList.at(idAwal);
+        size_t ukuranAwal = ruteVector.size();
+        ruteVector.erase(
+            remove_if(ruteVector.begin(), ruteVector.end(),
+                              [idTujuan](const Rute& rute) { return rute.idLokasiTujuan == idTujuan; }),
+            ruteVector.end()
+        );
+        if (ruteVector.size() < ukuranAwal) {
+            cout << "SUCCESS: Rute dari ID " << idAwal << " ke " << idTujuan << " berhasil dihapus.\n";
+            return true;
+        } else {
+            cout << "ERROR: Rute dari ID " << idAwal << " ke " << idTujuan << " tidak ditemukan.\n";
+            return false;
+        }
+    }
+```
+- `if (adjacencyList.find(idAwal) == adjacencyList.end())` : Cek apakah lokasi awal valid.
+- `auto& ruteVector = adjacencyList.at(idAwal); size_t ukuranAwal = ruteVector.size();` : Ambil daftar rute dari lokasi awal.
+- `ruteVector.erase(...);` : Hapus semua elemen `rute` yang menuju ke `idTujuan`.
+- `if (ruteVector.size() < ukuranAwal)` : Jika ukuran vektor berubah → berarti ada yang terhapus → tampilkan pesan sukses.
+
+<h3>5. Helper Functions</h3>
+
+<h3>5.1  muatLokasi</h3>
+
+Tujuan: Digunakan untuk menambahkan lokasi baru (misal saat load data dari file).
+
+```
+void muatLokasi(int id, const string& nama) {
+        if (daftarLokasi.find(id) == daftarLokasi.end()) {
+            daftarLokasi[id] = Lokasi(id, nama);
+            adjacencyList[id] = {};
+        }
+    }
+```
+- `if (daftarLokasi.find(id) == daftarLokasi.end()) {` : Cek dulu apakah ID sudah ada.
+- `daftarLokasi[id] = Lokasi(id, nama); adjacencyList[id] = {};` : Tambahkan ke daftar lokasi dan siapkan slot adjacency-nya.
+
+<h3>5.2  setNextId</h3>
+
+Tujuan: Set nilai `nextLokasiId`, misal saat membaca data dari file agar ID berikutnya tidak bentrok.
+
+```
+void setNextId(int id) { nextLokasiId = id; }
+```
+
+
 
 <h2 id="bagian4">4. bagian saha</h2>
 <!-- Konten bagian 4 -->
