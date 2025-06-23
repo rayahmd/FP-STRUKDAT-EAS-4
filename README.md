@@ -44,7 +44,7 @@ using namespace std;
 ```
 
 Penjelasan Tiap Library
-| **Library**       | **Kegunaan dalam Kode Implementasinya**                                                                                                                                  | **Contoh dari Kode Kamu**                                                                                                            |
+| **Library**       | **Kegunaan dalam Kode Implementasinya**                                                                                                                                  | **Contoh dari Kode Implementasinya**                                                                                                            |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `<iostream>`      | Digunakan untuk mencetak teks ke layar dan membaca input dari user.                                                                                           | `cout << "INFO: Graf telah dibersihkan.\n";`                                                                                         |
 | `<string>`        | Digunakan untuk memanipulasi teks, misalnya nama lokasi.                                                                                                      | `class Lokasi { string nama; }` dan `getline(cin, nama);`                                                                            |
