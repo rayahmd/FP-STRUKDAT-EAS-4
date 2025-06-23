@@ -4,6 +4,7 @@
 | Nama  | NRP |
 | ------------- | ------------- |
 | Zein Muhammad Hasan  | 5027241035 |
+| Aslam Ahmad Usman |  5027241074  |
 | Tiara Fatimah Azzahra  |  5027241090 |
 |  |  |
 
@@ -137,8 +138,139 @@ Kelas Rute adalah struktur data utama untuk merepresentasikan satu edge (jalur) 
 - Anda bisa tahu atribut-atributnya (jarak, waktu, biaya).
 - Anda bisa memilih bobot sesuai kebutuhan lewat getBobot() — berguna banget dalam algoritma Dijkstra.
 
-<h2 id="bagian2">2. bagian2</h2>
-<!-- Konten bagian 2 -->
+<h2 id="bagian2">2.  kelas graft dan fungsi-fungsinya (1) </h2>
+
+Bagian ini akan menjelaskan kelas dalam graf beserta fungsi-fungsi didalamnya. 
+
+Bagian pertama dimulai dari member-member yang terdapat dalam `private`, dimana terdapat daftar lokasi, graf, dan id  unik untuk nextLokasi agar dapat ditambah otomatis saat lokasi baru ditambah.
+
+```c
+class Graf {
+private:
+    unordered_map<int, Lokasi> daftarLokasi;
+    unordered_map<int, vector<Rute>> adjacencyList;
+    int nextLokasiId = 1;
+```
+
+Selanjutnya terdapat fitur `bersihkanGraf()` untuk membersihkan data dalam graf. Fungsi ini akan menghapus data berupa lokasi, rute, serta mengembalikan `nextLokasiId` ke nilai semula.
+
+```c
+void bersihkanGraf() {
+    daftarLokasi.clear();
+    adjacencyList.clear();
+    nextLokasiId = 1;
+    cout << "INFO: Graf telah dibersihkan.\n";
+}
+```
+
+<h3>1. Fitur Create</h3>
+
+Fitur yang ada pada create digunakan untuk menambahkan data-data yang diperlukan pada graf: Lokasi dan rute.
+
+<h3>1.1  Menambah Lokasi</h3>
+
+Fitur `tambahLokasi()` digunakan untuk menambah objek lokasi baru pada graf. Pertama ia akan membuat id unik yang baru untuk lokasi, lalu menyimpannya di `daftarLokasi[idBaru]` bersama dengan lokasi baru. Sementara itu `adjacencyList[idBaru]` dikosongkan agar tidak terjadi error saat menambah rute keluar.
+
+```c
+void tambahLokasi(const string& nama) {
+    int idBaru = nextLokasiId++;
+    daftarLokasi[idBaru] = Lokasi(idBaru, nama);
+    adjacencyList[idBaru] = {};
+    cout << "SUCCESS: Lokasi '" << nama << "' dengan ID " << idBaru << " berhasil ditambahkan.\n";
+}
+```
+
+<h3>1.2 Menambah Rute</h3>
+
+fitur `tambahRute()` digunakan untuk menambah rute baru ke adjencyList. Pertama ia akan memeriksa apakah kedua id lokasi sudah valid atau belum. Jika valid maka fungsi akan menambahkan rute pada `adjacencyList[idAwal]` dengan `emplace_back`.
+
+```c
+void tambahRute(int idAwal, int idTujuan, double jarak, double waktu, double biaya) {
+        if (daftarLokasi.find(idAwal) == daftarLokasi.end() || daftarLokasi.find(idTujuan) == daftarLokasi.end()) {
+            cout << "ERROR: Salah satu atau kedua ID lokasi tidak valid untuk menambah rute.\n";
+            return;
+        }
+        adjacencyList[idAwal].emplace_back(idTujuan, jarak, waktu, biaya);
+}
+```
+
+<h3>2. Fitur Read</h3>
+
+Fitur yang ada pada read digunakan untuk melihat data yang sudah dimasukan sebelumnya.
+
+<h3>2.1  Mengambil Lokasi dan Rute</h3>
+
+Fungsi `getLokasi()` dan `getTetangga()` digunakan untuk mengambil pointer ke objek lokasi dan rute berdasarkan id masing-masing objek. 
+
+```c
+const Lokasi* getLokasi(int id) const {
+        if (daftarLokasi.count(id)) return &daftarLokasi.at(id);
+        return nullptr;
+    }
+const vector<Rute>* getTetangga(int id) const {
+        if (adjacencyList.count(id)) return &adjacencyList.at(id);
+        return nullptr;
+    }
+```
+
+<h3>2.2  Memberi Akses Lokasi dan Rute</h3>
+
+Fungsi `getSemuaLokasi()` dan `getAdjacencyList()` digunakan untuk memberi akses untuk melihat keseluruhan isi graf: Lokasi dan rute.
+
+```c
+const unordered_map<int, Lokasi>& getSemuaLokasi() const {
+        return daftarLokasi;
+    }
+const unordered_map<int, vector<Rute>>& getAdjacencyList() const {
+        return adjacencyList;
+    }
+```
+
+<h3>2.3  Menampilkan graf</h3>
+
+Fungsi `void tampilkanGraf()` digunakan isi dari graf. Berikut fungsinya:
+
+```c
+void tampilkanGraf() const {
+        cout << "\n--- Visualisasi Graf Transportasi ---\n";
+        if (daftarLokasi.empty()) {
+            cout << "Graf masih kosong.\n";
+        }
+        for (const auto& pair : daftarLokasi) {
+            const Lokasi& lokAwal = pair.second;
+            cout << "[" << lokAwal.id << ": " << lokAwal.nama << "] terhubung ke:\n";
+            
+            const auto it = adjacencyList.find(lokAwal.id);
+            if (it == adjacencyList.end() || it->second.empty()) {
+                cout << "  (Tidak ada rute keluar)\n";
+            } else {
+                for (const Rute& rute : it->second) {
+                    const Lokasi* lokTujuan = getLokasi(rute.idLokasiTujuan);
+                    if (!lokTujuan) continue;
+                    cout << "  -> [" << lokTujuan->id << ": " << lokTujuan->nama << "] "
+                         << "(Jarak: " << rute.jarak << " km, "
+                         << "Waktu: " << rute.waktu << " mnt, "
+                         << "Biaya: Rp" << rute.biaya << ")\n";
+                }
+            }
+        }
+        cout << "-------------------------------------\n";
+    }
+```
+
+Mekanisme dari fungsi `tampilkanGraf()` adalah sebagai berikut:
+
+<ul>
+  <li>
+Pertama fungsi akan melihat apakah daftarLokasi masih kosong atau tidak.
+  </li>
+<li>
+Selanjutnya fungsi akan menampilkan setiap dari lokasi dan semua rute keluarnya dengan cara loop ke setiap lokasi, dan menyimpannya ke `lokAwal`.
+</li>
+<li>
+Fungsi lalu akan mengecek apakah lokasi memiliki rute keluar atau tidak. Jika lokasi memiliki rute keluar, maka fungsi akan melakukan loop ke setiap rute. Pertama loop akan akan mengambil lokasi tujuan berdasarkan `rute.idLokasiTujuan`, lalu menampilkan jarak, waktu, dan biaya dari rute tersebut.
+</li>
+</ul>
 
 <h2 id="bagian3">3. bagian saha</h2>
 <!-- Konten bagian 3 -->
