@@ -165,11 +165,11 @@ void bersihkanGraf() {
 
 <h3>1. Fitur Create</h3>
 
-Fitur yang ada pada create digunakan untuk menambahkan data-data yang diperlukan pada graf: Lokasi dan rute.
+Fitur yang ada pada create digunakan untuk menambahkan data-data yang diperlukan pada graf, seperti lokasi dan rute.
 
 <h3>1.1  Menambah Lokasi</h3>
 
-Fitur `tambahLokasi()` digunakan untuk menambah objek lokasi baru pada graf. Pertama ia akan membuat id unik yang baru untuk lokasi, lalu menyimpannya di `daftarLokasi[idBaru]` bersama dengan lokasi baru. Sementara itu `adjacencyList[idBaru]` dikosongkan agar tidak terjadi error saat menambah rute keluar.
+Fitur `tambahLokasi()` digunakan untuk menambah objek lokasi baru pada graf. Pertama ia akan membuat id unik yang baru untuk lokasi, lalu menyimpannya di `daftarLokasi[idBaru]` bersama dengan lokasi baru. Sementara itu `adjacencyList[idBaru]` dikosongkan agar tidak terjadi error pada saat menambah rute keluar.
 
 ```c
 void tambahLokasi(const string& nama) {
@@ -182,7 +182,7 @@ void tambahLokasi(const string& nama) {
 
 <h3>1.2 Menambah Rute</h3>
 
-fitur `tambahRute()` digunakan untuk menambah rute baru ke adjencyList. Pertama ia akan memeriksa apakah kedua id lokasi sudah valid atau belum. Jika valid maka fungsi akan menambahkan rute pada `adjacencyList[idAwal]` dengan `emplace_back`.
+fitur `tambahRute()` digunakan untuk menambah rute baru ke adjencyList. Pertama ia akan memeriksa apakah kedua id lokasi sudah valid atau belum. Jika valid, maka fungsi akan menambahkan rute pada `adjacencyList[idAwal]` dengan `emplace_back`.
 
 ```c
 void tambahRute(int idAwal, int idTujuan, double jarak, double waktu, double biaya) {
@@ -196,7 +196,7 @@ void tambahRute(int idAwal, int idTujuan, double jarak, double waktu, double bia
 
 <h3>2. Fitur Read</h3>
 
-Fitur yang ada pada read digunakan untuk melihat data yang sudah dimasukan sebelumnya.
+Fitur pada read yang digunakan untuk melihat data-data yang sudah dimasukan sebelumnya.
 
 <h3>2.1  Mengambil Lokasi dan Rute</h3>
 
@@ -228,7 +228,7 @@ const unordered_map<int, vector<Rute>>& getAdjacencyList() const {
 
 <h3>2.3  Menampilkan graf</h3>
 
-Fungsi `void tampilkanGraf()` digunakan isi dari graf. Berikut fungsinya:
+Fungsi `void tampilkanGraf()` digunakan untuk menampilkan isi dari graf. Berikut fungsinya:
 
 ```c
 void tampilkanGraf() const {
