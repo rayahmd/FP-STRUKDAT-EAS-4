@@ -6,14 +6,14 @@
 | Zein Muhammad Hasan  | 5027241035 |
 | Aslam Ahmad Usman |  5027241074  |
 | Tiara Fatimah Azzahra  |  5027241090 |
-|  |  |
+| Raya Ahmad Syarif  | 5027241041  |
 
 <ul>
   <li><a href="#bagian1">1. Pengantar Library dan Implementasi Kelas Rute</a></li>
   <li><a href="#bagian2">2. bagian saha</a></li>
   <li><a href="#bagian3">3. bagian saha</a></li>
   <li><a href="#bagian4">4. bagian saha</a></li>
-  <li><a href="#bagian5">5. bagian saha</a></li>
+  <li><a href="#bagian5">5. Kelas Pohon Preferensi & File Manager</a></li>
   <li><a href="#bagian6">6. Kelas Sistem dan main function</a></li>
   <li><a href="#bagian7">7. Demonstrasi dan output</a></li>
 </ul>
