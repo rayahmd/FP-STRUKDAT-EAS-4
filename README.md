@@ -316,3 +316,36 @@ penjelasan : <br>
 
 <h2 id="bagian7">7. Demonstrasi dan output</h2>
 <!-- Konten bagian 7 -->
+<h3>1. Menu utama</h3>
+
+![Image](https://github.com/user-attachments/assets/4de36d70-e857-4c8b-80b5-1f63b2ddfb6f)
+
+<h3>2. Kelola Lokasi & Rute (CRUD)</h3>
+
+![Image](https://github.com/user-attachments/assets/21852d87-fcc7-41e8-b4a5-cfbbd33a823c)
+
+<h3>3. Menu load data</h3>
+
+![Image](https://github.com/user-attachments/assets/53deeacc-ec72-4a30-8cae-8139815a3038)
+
+<h3>4. cari rute berdasarkan waktu</h3>
+
+![Image](https://github.com/user-attachments/assets/e61622ea-e4bb-4d68-89ee-8785374857f8)
+
+<h3>5. cari rute berdasarkan biaya</h3>
+
+![Image](https://github.com/user-attachments/assets/a031ee40-cc14-4404-b9ec-7aa7cc1ca208)
+
+<h3>6. cari rute berdasarkan jarak</h3>
+
+![Image](https://github.com/user-attachments/assets/e71bb26e-cce4-49e3-8d94-346b99e98878)
+
+<h3>7. visualisasi graf berupa teks</h3>
+
+![Image](https://github.com/user-attachments/assets/0cb76c88-1b22-48cc-b149-be08e4117c5f)
+
+<h3>7. visualisasi graf dengan matplotlib.pyplot</h3>
+
+![Image](https://github.com/user-attachments/assets/63177714-0dae-47b0-bf75-a988030ecc5c)
+
+![Image](https://github.com/user-attachments/assets/2af32525-830f-4d8b-9699-1fe6eb4191aa)
