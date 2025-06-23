@@ -418,6 +418,79 @@ Function JalankanPohon menggunakan switch case yang mana akan mengembalikan nila
 
 <h3> 2. Analisis ManajerFile </h3>  
 Class ini bertugas untuk membaca dan menyimpan data Graph dari file CSV. Terdapat beberapa function yaitu MuatDariCSV dan simpanKeCSV. MuatDariCSV bertugas untuk membaca file lokasi dan rute dari CSV untuk mengisi struktur graph dan simpanKeCSV yang dapat menyimpan data Graph ke File CSV, satu untuk lokasi dan satu untuk rute.  
+Berikut ini function muatDariCSV:
+
+```
+bool muatDariCSV(Graf& graf, const string& fileLokasi, const string& fileRute) {
+        ifstream fileLok(fileLokasi);
+        if (!fileLok.is_open()) {
+            cout << "ERROR: File lokasi '" << fileLokasi << "' tidak dapat dibuka.\n";
+            return false;
+        }
+        string line;
+        getline(fileLok, line); // Lewati header
+        int maxId = 0;
+        while (getline(fileLok, line)) {
+            if (line.empty()) continue;
+            stringstream ss(line);
+            string idStr, nama;
+            getline(ss, idStr, ',');
+            getline(ss, nama);
+            int id = stoi(idStr);
+            graf.muatLokasi(id, nama);
+            if (id > maxId) maxId = id;
+        }
+        graf.setNextId(maxId + 1);
+        fileLok.close();
+        ifstream fileRut(fileRute);
+        if (!fileRut.is_open()) {
+            cout << "ERROR: File rute '" << fileRute << "' tidak dapat dibuka.\n";
+            return false;
+        }
+        getline(fileRut, line); // Lewati header
+        while (getline(fileRut, line)) {
+            if (line.empty()) continue;
+            stringstream ss(line);
+            string idAwal, idTujuan, jarak, waktu, biaya;
+            getline(ss, idAwal, ',');
+            getline(ss, idTujuan, ',');
+            getline(ss, jarak, ',');
+            getline(ss, waktu, ',');
+            getline(ss, biaya, ',');
+            graf.tambahRute(stoi(idAwal), stoi(idTujuan), stod(jarak), stod(waktu), stod(biaya));
+        }
+        fileRut.close();
+        return true;
+    }
+```
+Dari function di atas dapat dilihat menerima tiga parameter yaitu graf, filelokasi, dan fileRute. fileLokasi digunakan untuk menerima parameter file CSV lokasi yang akan dibaca sedangkan fileRute untuk file CSV rute yang akan dibaca. Di dalam graf terdapat file lokasi-lokasi dan hubungannya yaitu rute. Function ini menggunakan ifstream untuk membaca file CSV kemudian disimpan ke dalam graf.
+
+Lalu, berikut ini merupakan function simpanKeCSV:
+
+```
+bool simpanKeCSV(const Graf& graf, const string& fileLokasi, const string& fileRute) {
+        ofstream fileLok(fileLokasi);
+        if (!fileLok.is_open()) return false;
+        fileLok << "id,nama\n";
+        for(const auto& pair : graf.getSemuaLokasi()){
+            fileLok << pair.second.id << "," << pair.second.nama << "\n";
+        }
+        fileLok.close();
+        ofstream fileRut(fileRute);
+        if(!fileRut.is_open()) return false;
+        fileRut << "id_awal,id_tujuan,jarak,waktu,biaya\n";
+        for(const auto& pair : graf.getAdjacencyList()){
+            int idAwal = pair.first;
+            for(const auto& rute : pair.second){
+                fileRut << idAwal << "," << rute.idLokasiTujuan << "," << rute.jarak << "," << rute.waktu << "," << rute.biaya << "\n";
+            }
+        }
+        fileRut.close();
+        cout << "SUCCESS: Data berhasil disimpan ke file '" << fileLokasi << "' dan '" << fileRute << "'.\n";
+        return true;
+    }
+```
+Function di atas digunakan untuk menyimpan lokasi dan rute ke dalam file CSV. Cara kerjanya adalah pertama membuka fileLokasi untuk di-input data, menulis id dan nama, lalu mengiterasikan seluruh lokasi dari graf dan ditulis ke dalam file. Hal yang sama terjadi di fileRute juga.
 
 <h2 id="bagian6">6. Kelas Sistem dan main function</h2>
 <!-- Konten bagian 6 -->
