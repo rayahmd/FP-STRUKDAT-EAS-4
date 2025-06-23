@@ -401,6 +401,76 @@ Poin ini menjelaskan implementasi salah satu algoritma pencarian rute Dijkstra p
 
   3. Hanya cocok untuk kasus single-source shortest path.
 <h3>4. Penjelasan kode</h3>
+<pre>struct HasilRute {
+    vector<int> path;
+    double totalJarak = 0.0;
+    double totalWaktu = 0.0;
+    double totalBiaya = 0.0;
+    bool ditemukan = false;
+};
+class PencariRute {
+public:
+    HasilRute cariRuteTerpendek(const Graf& graf, int idAwal, int idTujuan, const string& preferensi) {
+        HasilRute hasil;
+        if (!graf.getLokasi(idAwal) || !graf.getLokasi(idTujuan)) {
+            // Pesan error sudah ditangani di fungsi menuCariRute
+            return hasil;
+        }
+        using Pair = pair<double, int>;
+        priority_queue<Pair, vector<Pair>, greater<Pair>> pq;
+        unordered_map<int, double> bobotTotal;
+        unordered_map<int, int> pendahulu;
+        for (const auto& pair : graf.getSemuaLokasi()) {
+            bobotTotal[pair.first] = numeric_limits<double>::infinity();
+        }
+        bobotTotal[idAwal] = 0.0;
+        pq.push({0.0, idAwal});
+        while (!pq.empty()) {
+            int u = pq.top().second;
+            pq.pop();
+            if (u == idTujuan) break;
+            const vector<Rute>* tetangga = graf.getTetangga(u);
+            if (tetangga) {
+                for (const Rute& rute : *tetangga) {
+                    int v = rute.idLokasiTujuan;
+                    double bobotRute = rute.getBobot(preferensi);
+                    if (bobotTotal.count(v) && bobotTotal.at(u) + bobotRute < bobotTotal.at(v)) {
+                        bobotTotal[v] = bobotTotal.at(u) + bobotRute;
+                        pendahulu[v] = u;
+                        pq.push({bobotTotal.at(v), v});
+                    }
+                }
+            }
+        }
+        if (pendahulu.find(idTujuan) == pendahulu.end() && idAwal != idTujuan) {
+             return hasil;
+        }
+        int saatIni = idTujuan;
+        while (pendahulu.count(saatIni)) {
+            hasil.path.push_back(saatIni);
+            saatIni = pendahulu[saatIni];
+        }
+        hasil.path.push_back(idAwal);
+        reverse(hasil.path.begin(), hasil.path.end());
+        hasil.ditemukan = true;
+        for (size_t i = 0; i < hasil.path.size() - 1; ++i) {
+            int u = hasil.path[i];
+            int v = hasil.path[i + 1];
+            const auto* tetangga = graf.getTetangga(u);
+            if (tetangga) {
+                for (const auto& rute : *tetangga) {
+                    if (rute.idLokasiTujuan == v) {
+                        hasil.totalJarak += rute.jarak;
+                        hasil.totalWaktu += rute.waktu;
+                        hasil.totalBiaya += rute.biaya;
+                        break;
+                    }
+                }
+            }
+        }
+        return hasil;
+    }
+};</pre>
 
 <h2 id="bagian5">5. Class PreferredTree dan ManajerFile</h2>
 <!-- Konten bagian 5 -->
