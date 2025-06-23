@@ -19,8 +19,44 @@
 
 <hr>
 
-<h2 id="bagian1">1. bagian1</h2>
+<h2 id="bagian1">1. Pengantar Library dan Implementasi Kelas Rute</h2>
 <!-- Konten bagian 1 -->
+Tujuan Pembelajaran
+Pada bagian ini, kita akan:
+- Memahami library (pustaka) apa saja yang digunakan dalam program dan peranannya.
+- Mengenal konsep dan implementasi kelas Rute untuk merepresentasikan satu jalur dalam graf.
+
+Library dalam C++
+```
+#include <iostream>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <map>
+#include <queue>
+#include <limits>
+#include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <utility>
+
+using namespace std;
+```
+
+Penjelasan Tiap Library
+| **Library**       | **Kegunaan dalam Kode Kamu**                                                                                                                                  | **Contoh dari Kode Kamu**                                                                                                            |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `<iostream>`      | Digunakan untuk mencetak teks ke layar dan membaca input dari user.                                                                                           | `cout << "INFO: Graf telah dibersihkan.\n";`                                                                                         |
+| `<string>`        | Digunakan untuk memanipulasi teks, misalnya nama lokasi.                                                                                                      | `class Lokasi { string nama; }` dan `getline(cin, nama);`                                                                            |
+| `<vector>`        | Digunakan untuk membuat list dinamis seperti `adjacencyList` dan path rute.                                                                                   | `unordered_map<int, vector<Rute>> adjacencyList;` dan `vector<int> path;`                                                            |
+| `<unordered_map>` | Digunakan untuk membuat dictionary agar bisa cari lokasi cepat berdasarkan `ID`.                                                                              | `unordered_map<int, Lokasi> daftarLokasi;`                                                                                           |
+| `<map>`           | Digunakan untuk membuat dictionary berurut (jika mau urut berdasarkan ID). Tidak banyak dipakai di kode ini, tapi sudah di-include untuk fitur di masa depan. | Tidak digunakan langsung di kode saat ini.                                                                                           |
+| `<queue>`         | Digunakan untuk antrian prioritas dalam Dijkstra.                                                                                                             | `priority_queue<Pair, vector<Pair>, greater<Pair>> pq;` di `PencariRute::cariRuteTerpendek()`                                        |
+| `<limits>`        | Digunakan untuk membuat nilai infinity sebagai jarak awal.                                                                                                    | `numeric_limits<double>::infinity()` di `PencariRute::cariRuteTerpendek()`                                                           |
+| `<algorithm>`     | Digunakan untuk memanipulasi list seperti hapus dan balik urutan list.                                                                                        | `remove_if(...)` di `Graf::hapusLokasi()` dan `reverse(hasil.path.begin(), hasil.path.end());` di `PencariRute::cariRuteTerpendek()` |
+| `<fstream>`       | Digunakan untuk membaca dan menulis file CSV.                                                                                                                 | `ifstream fileLok(fileLokasi); ofstream fileRut(fileRute);` di `ManajerFile`                                                         |
+| `<sstream>`       | Digunakan untuk memecah teks CSV menjadi bagian-bagian.                                                                                                       | `stringstream ss(line); getline(ss, idStr, ',');` di `ManajerFile::muatDariCSV()`                                                    |
+| `<utility>`       | Digunakan untuk membuat pasangan nilai, berguna dalam queue prioritas Dijkstra.                                                                               | `using Pair = pair<double, int>; pq.push({0.0, idAwal});` di `PencariRute::cariRuteTerpendek()`                                      |
 
 <h2 id="bagian2">2. bagian2</h2>
 <!-- Konten bagian 2 -->
