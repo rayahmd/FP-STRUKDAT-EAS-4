@@ -30,6 +30,8 @@ Pada bagian ini:
 - Mengenal konsep dan implementasi kelas Rute untuk merepresentasikan satu jalur dalam graf.
 
 <h3>Library dalam C++</h3>
+Library dalam pemrograman adalah Kumpulan kode (fungsi, kelas, modul) yang sudah ditulis dan dikemas agar bisa langsung digunakan di program kita.
+
 
 ```
 
