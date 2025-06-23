@@ -32,7 +32,22 @@ Pada bagian ini:
 <h3>Library dalam C++</h3>
 Library dalam pemrograman adalah Kumpulan kode (fungsi, kelas, modul) yang sudah ditulis dan dikemas agar bisa langsung digunakan di program kita.
 
+```
+#include <iostream>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <map>
+#include <queue>
+#include <limits>
+#include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <utility>
 
+// Menggunakan namespace std untuk menghindari penulisan std:: berulang kali
+using namespace std;
+```
 ```
 
 Penjelasan Tiap Library
