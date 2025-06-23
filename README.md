@@ -4,10 +4,10 @@
 | Nama  | NRP |
 | ------------- | ------------- |
 | Zein Muhammad Hasan  | 5027241035 |
-| Aslam Ahmad Usman |  5027241074  |
-| Tiara Fatimah Azzahra  |  5027241090 |
 | Raya Ahmad Syarif  | 5027241041  |
+| Aslam Ahmad Usman |  5027241074  |
 | Mutiara Diva Jaladitha  | 5027241083  |
+| Tiara Fatimah Azzahra  |  5027241090 |
 
 <ul>
   <li><a href="#bagian1">1. Pengantar Library dan Implementasi Kelas Rute</a></li>
