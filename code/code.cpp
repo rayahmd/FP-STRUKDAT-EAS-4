@@ -8,7 +8,10 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
-#include <utility> 
+#include <utility>
+
+// Menggunakan namespace std untuk menghindari penulisan std:: berulang kali
+using namespace std;
 
 // ===================================================================
 // KELAS 1: LOKASI
@@ -16,8 +19,8 @@
 class Lokasi {
 public:
     int id;
-    std::string nama;
-    Lokasi(int id = 0, const std::string& nama = "") : id(id), nama(nama) {}
+    string nama;
+    Lokasi(int id = 0, const string& nama = "") : id(id), nama(nama) {}
 };
 
 
@@ -33,11 +36,11 @@ public:
     Rute(int tujuan, double jarak, double waktu, double biaya)
         : idLokasiTujuan(tujuan), jarak(jarak), waktu(waktu), biaya(biaya) {}
 
-    double getBobot(const std::string& preferensi) const {
+    double getBobot(const string& preferensi) const {
         if (preferensi == "waktu") return waktu;
         if (preferensi == "biaya") return biaya;
         if (preferensi == "jarak") return jarak;
-        return std::numeric_limits<double>::infinity();
+        return numeric_limits<double>::infinity();
     }
 };
 
@@ -47,8 +50,8 @@ public:
 // ===================================================================
 class Graf {
 private:
-    std::unordered_map<int, Lokasi> daftarLokasi;
-    std::unordered_map<int, std::vector<Rute>> adjacencyList;
+    unordered_map<int, Lokasi> daftarLokasi;
+    unordered_map<int, vector<Rute>> adjacencyList;
     int nextLokasiId = 1;
 
 public:
@@ -57,20 +60,20 @@ public:
         daftarLokasi.clear();
         adjacencyList.clear();
         nextLokasiId = 1;
-        std::cout << "INFO: Graf telah dibersihkan.\n";
+        cout << "INFO: Graf telah dibersihkan.\n";
     }
 
     // --- CREATE ---
-    void tambahLokasi(const std::string& nama) {
+    void tambahLokasi(const string& nama) {
         int idBaru = nextLokasiId++;
         daftarLokasi[idBaru] = Lokasi(idBaru, nama);
         adjacencyList[idBaru] = {};
-        std::cout << "SUCCESS: Lokasi '" << nama << "' dengan ID " << idBaru << " berhasil ditambahkan.\n";
+        cout << "SUCCESS: Lokasi '" << nama << "' dengan ID " << idBaru << " berhasil ditambahkan.\n";
     }
 
     void tambahRute(int idAwal, int idTujuan, double jarak, double waktu, double biaya) {
         if (daftarLokasi.find(idAwal) == daftarLokasi.end() || daftarLokasi.find(idTujuan) == daftarLokasi.end()) {
-            std::cout << "ERROR: Salah satu atau kedua ID lokasi tidak valid untuk menambah rute.\n";
+            cout << "ERROR: Salah satu atau kedua ID lokasi tidak valid untuk menambah rute.\n";
             return;
         }
         adjacencyList[idAwal].emplace_back(idTujuan, jarak, waktu, biaya);
@@ -82,96 +85,96 @@ public:
         if (daftarLokasi.count(id)) return &daftarLokasi.at(id);
         return nullptr;
     }
-    const std::vector<Rute>* getTetangga(int id) const {
+    const vector<Rute>* getTetangga(int id) const {
         if (adjacencyList.count(id)) return &adjacencyList.at(id);
         return nullptr;
     }
-    const std::unordered_map<int, Lokasi>& getSemuaLokasi() const {
+    const unordered_map<int, Lokasi>& getSemuaLokasi() const {
         return daftarLokasi;
     }
-    const std::unordered_map<int, std::vector<Rute>>& getAdjacencyList() const {
+    const unordered_map<int, vector<Rute>>& getAdjacencyList() const {
         return adjacencyList;
     }
     void tampilkanGraf() const {
-        std::cout << "\n--- Visualisasi Graf Transportasi ---\n";
+        cout << "\n--- Visualisasi Graf Transportasi ---\n";
         if (daftarLokasi.empty()) {
-            std::cout << "Graf masih kosong.\n";
+            cout << "Graf masih kosong.\n";
         }
         for (const auto& pair : daftarLokasi) {
             const Lokasi& lokAwal = pair.second;
-            std::cout << "[" << lokAwal.id << ": " << lokAwal.nama << "] terhubung ke:\n";
+            cout << "[" << lokAwal.id << ": " << lokAwal.nama << "] terhubung ke:\n";
             
             const auto it = adjacencyList.find(lokAwal.id);
             if (it == adjacencyList.end() || it->second.empty()) {
-                std::cout << "  (Tidak ada rute keluar)\n";
+                cout << "  (Tidak ada rute keluar)\n";
             } else {
                 for (const Rute& rute : it->second) {
                     const Lokasi* lokTujuan = getLokasi(rute.idLokasiTujuan);
                     if (!lokTujuan) continue;
-                    std::cout << "  -> [" << lokTujuan->id << ": " << lokTujuan->nama << "] "
-                              << "(Jarak: " << rute.jarak << " km, "
-                              << "Waktu: " << rute.waktu << " mnt, "
-                              << "Biaya: Rp" << rute.biaya << ")\n";
+                    cout << "  -> [" << lokTujuan->id << ": " << lokTujuan->nama << "] "
+                         << "(Jarak: " << rute.jarak << " km, "
+                         << "Waktu: " << rute.waktu << " mnt, "
+                         << "Biaya: Rp" << rute.biaya << ")\n";
                 }
             }
         }
-        std::cout << "-------------------------------------\n";
+        cout << "-------------------------------------\n";
     }
 
     // --- UPDATE ---
-    void updateLokasi(int id, const std::string& namaBaru) {
+    void updateLokasi(int id, const string& namaBaru) {
         if (daftarLokasi.find(id) != daftarLokasi.end()) {
             daftarLokasi.at(id).nama = namaBaru;
-            std::cout << "SUCCESS: Lokasi ID " << id << " berhasil diperbarui menjadi '" << namaBaru << "'.\n";
+            cout << "SUCCESS: Lokasi ID " << id << " berhasil diperbarui menjadi '" << namaBaru << "'.\n";
         } else {
-            std::cout << "ERROR: Lokasi dengan ID " << id << " tidak ditemukan.\n";
+            cout << "ERROR: Lokasi dengan ID " << id << " tidak ditemukan.\n";
         }
     }
 
     // --- DELETE ---
     bool hapusLokasi(int id) {
         if (daftarLokasi.find(id) == daftarLokasi.end()) {
-            std::cout << "ERROR: Lokasi dengan ID " << id << " tidak ditemukan.\n";
+            cout << "ERROR: Lokasi dengan ID " << id << " tidak ditemukan.\n";
             return false;
         }
-        std::string namaLokasi = daftarLokasi.at(id).nama;
+        string namaLokasi = daftarLokasi.at(id).nama;
         daftarLokasi.erase(id);
         adjacencyList.erase(id);
         for (auto& pair : adjacencyList) {
             auto& ruteVector = pair.second;
             ruteVector.erase(
-                std::remove_if(ruteVector.begin(), ruteVector.end(),
-                               [id](const Rute& rute) { return rute.idLokasiTujuan == id; }),
+                remove_if(ruteVector.begin(), ruteVector.end(),
+                                  [id](const Rute& rute) { return rute.idLokasiTujuan == id; }),
                 ruteVector.end()
             );
         }
-        std::cout << "SUCCESS: Lokasi '" << namaLokasi << "' (ID: " << id << ") dan semua rute terkait telah dihapus.\n";
+        cout << "SUCCESS: Lokasi '" << namaLokasi << "' (ID: " << id << ") dan semua rute terkait telah dihapus.\n";
         return true;
     }
 
     bool hapusRute(int idAwal, int idTujuan) {
         if (adjacencyList.find(idAwal) == adjacencyList.end()) {
-            std::cout << "ERROR: Lokasi awal dengan ID " << idAwal << " tidak ditemukan.\n";
+            cout << "ERROR: Lokasi awal dengan ID " << idAwal << " tidak ditemukan.\n";
             return false;
         }
         auto& ruteVector = adjacencyList.at(idAwal);
         size_t ukuranAwal = ruteVector.size();
         ruteVector.erase(
-            std::remove_if(ruteVector.begin(), ruteVector.end(),
-                           [idTujuan](const Rute& rute) { return rute.idLokasiTujuan == idTujuan; }),
+            remove_if(ruteVector.begin(), ruteVector.end(),
+                              [idTujuan](const Rute& rute) { return rute.idLokasiTujuan == idTujuan; }),
             ruteVector.end()
         );
         if (ruteVector.size() < ukuranAwal) {
-            std::cout << "SUCCESS: Rute dari ID " << idAwal << " ke " << idTujuan << " berhasil dihapus.\n";
+            cout << "SUCCESS: Rute dari ID " << idAwal << " ke " << idTujuan << " berhasil dihapus.\n";
             return true;
         } else {
-            std::cout << "ERROR: Rute dari ID " << idAwal << " ke " << idTujuan << " tidak ditemukan.\n";
+            cout << "ERROR: Rute dari ID " << idAwal << " ke " << idTujuan << " tidak ditemukan.\n";
             return false;
         }
     }
 
     // --- Helper functions ---
-    void muatLokasi(int id, const std::string& nama) {
+    void muatLokasi(int id, const string& nama) {
         if (daftarLokasi.find(id) == daftarLokasi.end()) {
             daftarLokasi[id] = Lokasi(id, nama);
             adjacencyList[id] = {};
@@ -180,13 +183,11 @@ public:
     void setNextId(int id) { nextLokasiId = id; }
 };
 
-// ... (Kelas PencariRute dan PohonPreferensi tidak berubah) ...
-// (Kelas ManajerFile juga tidak berubah)
 // ===================================================================
 // KELAS 4: PENCARI RUTE (Tidak ada perubahan)
 // ===================================================================
 struct HasilRute {
-    std::vector<int> path;
+    vector<int> path;
     double totalJarak = 0.0;
     double totalWaktu = 0.0;
     double totalBiaya = 0.0;
@@ -195,18 +196,18 @@ struct HasilRute {
 
 class PencariRute {
 public:
-    HasilRute cariRuteTerpendek(const Graf& graf, int idAwal, int idTujuan, const std::string& preferensi) {
+    HasilRute cariRuteTerpendek(const Graf& graf, int idAwal, int idTujuan, const string& preferensi) {
         HasilRute hasil;
         if (!graf.getLokasi(idAwal) || !graf.getLokasi(idTujuan)) {
             // Pesan error sudah ditangani di fungsi menuCariRute
             return hasil;
         }
-        using Pair = std::pair<double, int>;
-        std::priority_queue<Pair, std::vector<Pair>, std::greater<Pair>> pq;
-        std::unordered_map<int, double> bobotTotal;
-        std::unordered_map<int, int> pendahulu;
+        using Pair = pair<double, int>;
+        priority_queue<Pair, vector<Pair>, greater<Pair>> pq;
+        unordered_map<int, double> bobotTotal;
+        unordered_map<int, int> pendahulu;
         for (const auto& pair : graf.getSemuaLokasi()) {
-            bobotTotal[pair.first] = std::numeric_limits<double>::infinity();
+            bobotTotal[pair.first] = numeric_limits<double>::infinity();
         }
         bobotTotal[idAwal] = 0.0;
         pq.push({0.0, idAwal});
@@ -214,7 +215,7 @@ public:
             int u = pq.top().second;
             pq.pop();
             if (u == idTujuan) break;
-            const std::vector<Rute>* tetangga = graf.getTetangga(u);
+            const vector<Rute>* tetangga = graf.getTetangga(u);
             if (tetangga) {
                 for (const Rute& rute : *tetangga) {
                     int v = rute.idLokasiTujuan;
@@ -236,7 +237,7 @@ public:
             saatIni = pendahulu[saatIni];
         }
         hasil.path.push_back(idAwal);
-        std::reverse(hasil.path.begin(), hasil.path.end());
+        reverse(hasil.path.begin(), hasil.path.end());
         hasil.ditemukan = true;
         for (size_t i = 0; i < hasil.path.size() - 1; ++i) {
             int u = hasil.path[i];
@@ -263,20 +264,20 @@ public:
 // ===================================================================
 class PohonPreferensi {
 public:
-    std::string jalankanPohon() {
-        std::cout << "\nSilakan pilih preferensi rute Anda:\n";
-        std::cout << "1. Waktu Tercepat\n";
-        std::cout << "2. Biaya Termurah\n";
-        std::cout << "3. Jarak Terpendek\n";
-        std::cout << "Pilihan Anda: " << std::flush;
+    string jalankanPohon() {
+        cout << "\nSilakan pilih preferensi rute Anda:\n";
+        cout << "1. Waktu Tercepat\n";
+        cout << "2. Biaya Termurah\n";
+        cout << "3. Jarak Terpendek\n";
+        cout << "Pilihan Anda: " << flush;
         int pilihan;
-        std::cin >> pilihan;
+        cin >> pilihan;
         switch(pilihan) {
             case 1: return "waktu";
             case 2: return "biaya";
             case 3: return "jarak";
             default:
-                std::cout << "Pilihan tidak valid. Menggunakan preferensi default (Waktu).\n";
+                cout << "Pilihan tidak valid. Menggunakan preferensi default (Waktu).\n";
                 return "waktu";
         }
     }
@@ -288,57 +289,57 @@ public:
 // ===================================================================
 class ManajerFile {
 public:
-    bool muatDariCSV(Graf& graf, const std::string& fileLokasi, const std::string& fileRute) {
-        std::ifstream fileLok(fileLokasi);
+    bool muatDariCSV(Graf& graf, const string& fileLokasi, const string& fileRute) {
+        ifstream fileLok(fileLokasi);
         if (!fileLok.is_open()) {
-            std::cout << "ERROR: File lokasi '" << fileLokasi << "' tidak dapat dibuka.\n";
+            cout << "ERROR: File lokasi '" << fileLokasi << "' tidak dapat dibuka.\n";
             return false;
         }
-        std::string line;
-        std::getline(fileLok, line); // Lewati header
+        string line;
+        getline(fileLok, line); // Lewati header
         int maxId = 0;
-        while (std::getline(fileLok, line)) {
+        while (getline(fileLok, line)) {
             if (line.empty()) continue;
-            std::stringstream ss(line);
-            std::string idStr, nama;
-            std::getline(ss, idStr, ',');
-            std::getline(ss, nama);
-            int id = std::stoi(idStr);
+            stringstream ss(line);
+            string idStr, nama;
+            getline(ss, idStr, ',');
+            getline(ss, nama);
+            int id = stoi(idStr);
             graf.muatLokasi(id, nama);
             if (id > maxId) maxId = id;
         }
         graf.setNextId(maxId + 1);
         fileLok.close();
-        std::ifstream fileRut(fileRute);
+        ifstream fileRut(fileRute);
         if (!fileRut.is_open()) {
-            std::cout << "ERROR: File rute '" << fileRute << "' tidak dapat dibuka.\n";
+            cout << "ERROR: File rute '" << fileRute << "' tidak dapat dibuka.\n";
             return false;
         }
-        std::getline(fileRut, line); // Lewati header
-        while (std::getline(fileRut, line)) {
+        getline(fileRut, line); // Lewati header
+        while (getline(fileRut, line)) {
             if (line.empty()) continue;
-            std::stringstream ss(line);
-            std::string idAwal, idTujuan, jarak, waktu, biaya;
-            std::getline(ss, idAwal, ',');
-            std::getline(ss, idTujuan, ',');
-            std::getline(ss, jarak, ',');
-            std::getline(ss, waktu, ',');
-            std::getline(ss, biaya, ',');
-            graf.tambahRute(std::stoi(idAwal), std::stoi(idTujuan), std::stod(jarak), std::stod(waktu), std::stod(biaya));
+            stringstream ss(line);
+            string idAwal, idTujuan, jarak, waktu, biaya;
+            getline(ss, idAwal, ',');
+            getline(ss, idTujuan, ',');
+            getline(ss, jarak, ',');
+            getline(ss, waktu, ',');
+            getline(ss, biaya, ',');
+            graf.tambahRute(stoi(idAwal), stoi(idTujuan), stod(jarak), stod(waktu), stod(biaya));
         }
         fileRut.close();
         return true;
     }
     
-    bool simpanKeCSV(const Graf& graf, const std::string& fileLokasi, const std::string& fileRute) {
-        std::ofstream fileLok(fileLokasi);
+    bool simpanKeCSV(const Graf& graf, const string& fileLokasi, const string& fileRute) {
+        ofstream fileLok(fileLokasi);
         if (!fileLok.is_open()) return false;
         fileLok << "id,nama\n";
         for(const auto& pair : graf.getSemuaLokasi()){
             fileLok << pair.second.id << "," << pair.second.nama << "\n";
         }
         fileLok.close();
-        std::ofstream fileRut(fileRute);
+        ofstream fileRut(fileRute);
         if(!fileRut.is_open()) return false;
         fileRut << "id_awal,id_tujuan,jarak,waktu,biaya\n";
         for(const auto& pair : graf.getAdjacencyList()){
@@ -348,7 +349,7 @@ public:
             }
         }
         fileRut.close();
-        std::cout << "SUCCESS: Data berhasil disimpan ke file '" << fileLokasi << "' dan '" << fileRute << "'.\n";
+        cout << "SUCCESS: Data berhasil disimpan ke file '" << fileLokasi << "' dan '" << fileRute << "'.\n";
         return true;
     }
 };
@@ -366,136 +367,136 @@ private:
 
     // --- Fungsi UI ---
     void menuCariRute() {
-        std::cout << "\n--- Cari Rute ---\n";
+        cout << "\n--- Cari Rute ---\n";
         graf.tampilkanGraf();
         if (graf.getSemuaLokasi().empty()) {
-            std::cout << "Graf masih kosong. Silakan tambah lokasi dan rute terlebih dahulu.\n";
+            cout << "Graf masih kosong. Silakan tambah lokasi dan rute terlebih dahulu.\n";
             return;
         }
-        std::cout << "Masukkan ID Lokasi Awal: ";
+        cout << "Masukkan ID Lokasi Awal: ";
         int idAwal;
-        std::cin >> idAwal;
-        if (std::cin.fail()) {
-            std::cout << "Input tidak valid.\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin >> idAwal;
+        if (cin.fail()) {
+            cout << "Input tidak valid.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             return;
         }
-        std::cout << "Masukkan ID Lokasi Tujuan: ";
+        cout << "Masukkan ID Lokasi Tujuan: ";
         int idTujuan;
-        std::cin >> idTujuan;
-        if (std::cin.fail()) {
-            std::cout << "Input tidak valid.\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin >> idTujuan;
+        if (cin.fail()) {
+            cout << "Input tidak valid.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             return;
         }
-        std::string preferensi = pohonPreferensi.jalankanPohon();
+        string preferensi = pohonPreferensi.jalankanPohon();
         HasilRute hasil = pencari.cariRuteTerpendek(graf, idAwal, idTujuan, preferensi);
         if (hasil.ditemukan) {
-            std::cout << "\n--- HASIL REKOMENDASI RUTE ---\n";
-            std::cout << "Preferensi: " << preferensi << std::endl;
-            std::cout << "Rute: ";
+            cout << "\n--- HASIL REKOMENDASI RUTE ---\n";
+            cout << "Preferensi: " << preferensi << endl;
+            cout << "Rute: ";
             for (size_t i = 0; i < hasil.path.size(); ++i) {
                 const Lokasi* lok = graf.getLokasi(hasil.path[i]);
                 if (lok) {
-                    std::cout << lok->nama << (i == hasil.path.size() - 1 ? "" : " -> ");
+                    cout << lok->nama << (i == hasil.path.size() - 1 ? "" : " -> ");
                 }
             }
-            std::cout << "\n\nDetail Perjalanan:\n";
-            std::cout << "  - Total Jarak: " << hasil.totalJarak << " km\n";
-            std::cout << "  - Total Waktu: " << hasil.totalWaktu << " menit\n";
-            std::cout << "  - Total Biaya: Rp" << hasil.totalBiaya << "\n";
-            std::cout << "---------------------------------\n";
+            cout << "\n\nDetail Perjalanan:\n";
+            cout << "  - Total Jarak: " << hasil.totalJarak << " km\n";
+            cout << "  - Total Waktu: " << hasil.totalWaktu << " menit\n";
+            cout << "  - Total Biaya: Rp" << hasil.totalBiaya << "\n";
+            cout << "---------------------------------\n";
         } else {
             const Lokasi* lokAwal = graf.getLokasi(idAwal);
             const Lokasi* lokTujuan = graf.getLokasi(idTujuan);
             if (lokAwal && lokTujuan) {
-                std::cout << "\nMaaf, tidak ditemukan rute dari " << lokAwal->nama << " ke " << lokTujuan->nama << ".\n";
+                cout << "\nMaaf, tidak ditemukan rute dari " << lokAwal->nama << " ke " << lokTujuan->nama << ".\n";
             } else {
-                std::cout << "\nMaaf, ID lokasi awal atau tujuan tidak valid.\n";
+                cout << "\nMaaf, ID lokasi awal atau tujuan tidak valid.\n";
             }
         }
     }
     
     void prosesTambahLokasi() {
-        std::cout << "\n-- Tambah Lokasi Baru --\n";
-        std::cout << "Masukkan nama lokasi: ";
-        std::string nama;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::getline(std::cin, nama);
+        cout << "\n-- Tambah Lokasi Baru --\n";
+        cout << "Masukkan nama lokasi: ";
+        string nama;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        getline(cin, nama);
         graf.tambahLokasi(nama);
     }
 
     void prosesHapusLokasi() {
-        std::cout << "\n-- Hapus Lokasi --\n";
+        cout << "\n-- Hapus Lokasi --\n";
         graf.tampilkanGraf();
-        std::cout << "Masukkan ID lokasi yang akan dihapus: ";
+        cout << "Masukkan ID lokasi yang akan dihapus: ";
         int id;
-        std::cin >> id;
+        cin >> id;
         graf.hapusLokasi(id);
     }
 
     void prosesUpdateLokasi() {
-        std::cout << "\n-- Update Nama Lokasi --\n";
+        cout << "\n-- Update Nama Lokasi --\n";
         graf.tampilkanGraf();
-        std::cout << "Masukkan ID lokasi yang akan diupdate: ";
+        cout << "Masukkan ID lokasi yang akan diupdate: ";
         int id;
-        std::cin >> id;
-        std::cout << "Masukkan nama baru untuk lokasi ID " << id << ": ";
-        std::string namaBaru;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::getline(std::cin, namaBaru);
+        cin >> id;
+        cout << "Masukkan nama baru untuk lokasi ID " << id << ": ";
+        string namaBaru;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        getline(cin, namaBaru);
         graf.updateLokasi(id, namaBaru);
     }
 
     void prosesTambahRute() {
-        std::cout << "\n-- Tambah Rute Baru --\n";
+        cout << "\n-- Tambah Rute Baru --\n";
         graf.tampilkanGraf();
         int idAwal, idTujuan;
         double jarak, waktu, biaya;
-        std::cout << "Masukkan ID lokasi awal: ";
-        std::cin >> idAwal;
-        std::cout << "Masukkan ID lokasi tujuan: ";
-        std::cin >> idTujuan;
-        std::cout << "Masukkan jarak (km): ";
-        std::cin >> jarak;
-        std::cout << "Masukkan waktu (menit): ";
-        std::cin >> waktu;
-        std::cout << "Masukkan biaya (Rp): ";
-        std::cin >> biaya;
+        cout << "Masukkan ID lokasi awal: ";
+        cin >> idAwal;
+        cout << "Masukkan ID lokasi tujuan: ";
+        cin >> idTujuan;
+        cout << "Masukkan jarak (km): ";
+        cin >> jarak;
+        cout << "Masukkan waktu (menit): ";
+        cin >> waktu;
+        cout << "Masukkan biaya (Rp): ";
+        cin >> biaya;
         graf.tambahRute(idAwal, idTujuan, jarak, waktu, biaya);
-        std::cout << "SUCCESS: Rute dari " << idAwal << " ke " << idTujuan << " berhasil ditambahkan.\n";
+        cout << "SUCCESS: Rute dari " << idAwal << " ke " << idTujuan << " berhasil ditambahkan.\n";
     }
 
     void prosesHapusRute() {
-        std::cout << "\n-- Hapus Rute --\n";
+        cout << "\n-- Hapus Rute --\n";
         graf.tampilkanGraf();
         int idAwal, idTujuan;
-        std::cout << "Masukkan ID lokasi awal rute: ";
-        std::cin >> idAwal;
-        std::cout << "Masukkan ID lokasi tujuan rute: ";
-        std::cin >> idTujuan;
+        cout << "Masukkan ID lokasi awal rute: ";
+        cin >> idAwal;
+        cout << "Masukkan ID lokasi tujuan rute: ";
+        cin >> idTujuan;
         graf.hapusRute(idAwal, idTujuan);
     }
 
     void menuManajemenData() {
         bool kembali = false;
         while (!kembali) {
-            std::cout << "\n--- Manajemen Data Graf ---\n";
-            std::cout << "1. Tambah Lokasi\n";
-            std::cout << "2. Hapus Lokasi\n";
-            std::cout << "3. Update Nama Lokasi\n";
-            std::cout << "4. Tambah Rute\n";
-            std::cout << "5. Hapus Rute\n";
-            std::cout << "0. Kembali ke Menu Utama\n";
-            std::cout << "Pilihan: " << std::flush;
+            cout << "\n--- Manajemen Data Graf ---\n";
+            cout << "1. Tambah Lokasi\n";
+            cout << "2. Hapus Lokasi\n";
+            cout << "3. Update Nama Lokasi\n";
+            cout << "4. Tambah Rute\n";
+            cout << "5. Hapus Rute\n";
+            cout << "0. Kembali ke Menu Utama\n";
+            cout << "Pilihan: " << flush;
             int pilihan;
-            std::cin >> pilihan;
-            if (std::cin.fail()) {
-                std::cout << "Input tidak valid. Harap masukkan angka.\n";
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin >> pilihan;
+            if (cin.fail()) {
+                cout << "Input tidak valid. Harap masukkan angka.\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue;
             }
             switch (pilihan) {
@@ -505,30 +506,30 @@ private:
                 case 4: prosesTambahRute(); break;
                 case 5: prosesHapusRute(); break;
                 case 0: kembali = true; break;
-                default: std::cout << "Pilihan tidak valid.\n";
+                default: cout << "Pilihan tidak valid.\n";
             }
         }
     }
     
     // --- FITUR BARU: Fungsi untuk menangani pemuatan file ---
     void prosesMuatDataDariFile() {
-        std::cout << "\n--- Muat Data dari File CSV ---\n";
-        std::cout << "PERINGATAN: Data graf yang ada saat ini akan dihapus.\n";
+        cout << "\n--- Muat Data dari File CSV ---\n";
+        cout << "PERINGATAN: Data graf yang ada saat ini akan dihapus.\n";
         
-        std::string namaFileLokasi, namaFileRute;
-        std::cout << "Masukkan nama file lokasi (contoh: lokasi_kampus.csv): ";
-        std::cin >> namaFileLokasi;
+        string namaFileLokasi, namaFileRute;
+        cout << "Masukkan nama file lokasi (contoh: lokasi_kampus.csv): ";
+        cin >> namaFileLokasi;
         
-        std::cout << "Masukkan nama file rute (contoh: rute_kampus.csv): ";
-        std::cin >> namaFileRute;
+        cout << "Masukkan nama file rute (contoh: rute_kampus.csv): ";
+        cin >> namaFileRute;
 
         graf.bersihkanGraf(); // Bersihkan data lama
         bool sukses = manajerFile.muatDariCSV(graf, namaFileLokasi, namaFileRute);
 
         if (sukses) {
-            std::cout << "SUCCESS: Data baru dari '" << namaFileLokasi << "' dan '" << namaFileRute << "' berhasil dimuat.\n";
+            cout << "SUCCESS: Data baru dari '" << namaFileLokasi << "' dan '" << namaFileRute << "' berhasil dimuat.\n";
         } else {
-            std::cout << "FAIL: Gagal memuat data dari file. Pastikan nama file benar dan file ada di direktori yang sama.\n";
+            cout << "FAIL: Gagal memuat data dari file. Pastikan nama file benar dan file ada di direktori yang sama.\n";
         }
     }
 
@@ -539,21 +540,21 @@ public:
         
         bool berjalan = true;
         while(berjalan) {
-            std::cout << "\n===== Sistem Rekomendasi Rute Transportasi =====\n";
-            std::cout << "1. Cari Rute Terbaik\n";
-            std::cout << "2. Tampilkan Peta Rute (Graf)\n";
-            std::cout << "3. Kelola Lokasi & Rute (CRUD)\n";
-            std::cout << "4. Simpan Data ke File\n";
-            std::cout << "5. Muat Data dari File\n";
-            std::cout << "0. Keluar\n";
-            std::cout << "Pilihan: " << std::flush;
+            cout << "\n===== Sistem Rekomendasi Rute Transportasi =====\n";
+            cout << "1. Cari Rute Terbaik\n";
+            cout << "2. Tampilkan Peta Rute (Graf)\n";
+            cout << "3. Kelola Lokasi & Rute (CRUD)\n";
+            cout << "4. Simpan Data ke File\n";
+            cout << "5. Muat Data dari File\n";
+            cout << "0. Keluar\n";
+            cout << "Pilihan: " << flush;
             
             int pilihan;
-            std::cin >> pilihan;
-            if (std::cin.fail()) {
-                std::cout << "Input tidak valid. Harap masukkan angka.\n";
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin >> pilihan;
+            if (cin.fail()) {
+                cout << "Input tidak valid. Harap masukkan angka.\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue;
             }
             
@@ -565,10 +566,10 @@ public:
                 // --- PERBAIKAN: Hubungkan ke fungsi baru ---
                 case 5: prosesMuatDataDariFile(); break;
                 case 0: berjalan = false; break;
-                default: std::cout << "Pilihan tidak valid.\n";
+                default: cout << "Pilihan tidak valid.\n";
             }
         }
-        std::cout << "Terima kasih!\n";
+        cout << "Terima kasih!\n";
     }
 };
 
