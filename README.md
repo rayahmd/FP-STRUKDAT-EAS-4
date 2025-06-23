@@ -11,8 +11,8 @@
 
 <ul>
   <li><a href="#bagian1">1. Pengantar Library dan Implementasi Kelas Rute</a></li>
-  <li><a href="#bagian2">2. bagian saha</a></li>
-  <li><a href="#bagian3">3. bagian saha</a></li>
+  <li><a href="#bagian2">2. kelas graft dan fungsi-fungsinya (1)</a></li>
+  <li><a href="#bagian3">3. kelas graft dan fungsi-fungsinya (2)</a></li>
   <li><a href="#bagian4">4. bagian saha</a></li>
   <li><a href="#bagian5">5. Kelas Pohon Preferensi & File Manager</a></li>
   <li><a href="#bagian6">6. Kelas Sistem dan main function</a></li>
@@ -272,6 +272,8 @@ Selanjutnya fungsi akan menampilkan setiap dari lokasi dan semua rute keluarnya 
 Fungsi lalu akan mengecek apakah lokasi memiliki rute keluar atau tidak. Jika lokasi memiliki rute keluar, maka fungsi akan melakukan loop ke setiap rute. Pertama loop akan akan mengambil lokasi tujuan berdasarkan `rute.idLokasiTujuan`, lalu menampilkan jarak, waktu, dan biaya dari rute tersebut.
 </li>
 </ul>
+
+<h2 id="bagian3">3.  kelas graft dan fungsi-fungsinya (2) </h2>
 
 <h3>3. Fitur Update</h3>
 
