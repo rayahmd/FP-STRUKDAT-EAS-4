@@ -369,9 +369,38 @@ void setNextId(int id) { nextLokasiId = id; }
 ```
 
 
+<h2 id="bagian4">4. Class Algoritma Pencarian Rute (Dijkstra)</h2>
+Poin ini menjelaskan implementasi salah satu algoritma pencarian rute Dijkstra pada CPP dengan menerapkan Object Oriented Programming (OOP). Pencarian rute ini memilih rute terpendek dan terbaik dimana berdasarkan beberapa parameter yaitu waktu, jarak, biaya dalam bentuk graf.
 
-<h2 id="bagian4">4. bagian saha</h2>
-<!-- Konten bagian 4 -->
+<h3>1. Alasan Menggunakan Dijkstra</h3>
+  Dijkstra dipilih karena:
+  
+  1. Cocok untuk graf berbobot non-negatif seperti jarak, biaya, atau waktu.
+  
+  2. Memberikan solusi paling optimal dari satu titik ke semua titik lainnya.
+     
+  3. Bersifat deterministik, hasilnya pasti jika input sama.
+     
+  4. Waktu eksekusi efisien dengan struktur seperti priority queue (heap).
+
+<h3>2. Komponen Utama</h3>
+
+   1. Struktur Data Graf
+      
+   2. Class rute
+      
+   3. Rute finder
+      
+   4. struct hasil rute
+      
+<h3>3. Kekurangan</h3>
+
+  1. Tidak mendukung bobot negatif (gunakan Bellman-Ford untuk itu).
+
+  2. Proses bisa lambat untuk graf besar tanpa heap atau optimasi.
+
+  3. Hanya cocok untuk kasus single-source shortest path.
+<h3>4. Penjelasan kode</h3>
 
 <h2 id="bagian5">5. Class PreferredTree dan ManajerFile</h2>
 <!-- Konten bagian 5 -->
