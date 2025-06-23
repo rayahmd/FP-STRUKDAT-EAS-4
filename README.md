@@ -30,20 +30,7 @@ Pada bagian ini:
 - Mengenal konsep dan implementasi kelas Rute untuk merepresentasikan satu jalur dalam graf.
 
 <h3>Library dalam C++</h3>
-```
-#include <iostream>
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include <map>
-#include <queue>
-#include <limits>
-#include <algorithm>
-#include <fstream>
-#include <sstream>
-#include <utility>
 
-using namespace std;
 ```
 
 Penjelasan Tiap Library
