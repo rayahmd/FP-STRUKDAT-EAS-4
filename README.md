@@ -24,7 +24,7 @@
 <h2 id="bagian1">1. Pengantar Library dan Implementasi Kelas Rute</h2>
 <!-- Konten bagian 1 -->
 Tujuan Pembelajaran
-Pada bagian ini, kita akan:
+Pada bagian ini:
 
 - Memahami library (pustaka) apa saja yang digunakan dalam program dan peranannya.
 - Mengenal konsep dan implementasi kelas Rute untuk merepresentasikan satu jalur dalam graf.
