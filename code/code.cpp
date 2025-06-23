@@ -518,10 +518,10 @@ private:
         
         string namaFileLokasi, namaFileRute;
         cout << "Masukkan nama file lokasi (contoh: lokasi_kampus.csv): ";
-        getline(cin, namaFileLokasi);
+        cin >> namaFileLokasi;
         
         cout << "Masukkan nama file rute (contoh: rute_kampus.csv): ";
-        getline(cin, namaFileRute);
+        cin >> namaFileRute;
 
         graf.bersihkanGraf(); // Bersihkan data lama
         bool sukses = manajerFile.muatDariCSV(graf, namaFileLokasi, namaFileRute);
