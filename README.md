@@ -254,6 +254,65 @@ void menuCariRute() {
   </li>
 </ul>
 
+<h3>1.3. Fungsi jalankan() (Public Method)</h3>
+Ini adalah satu-satunya fungsi public yang utama dan menjadi pintu masuk untuk menjalankan seluruh aplikasi dari luar kelas.
+
+```cpp
+public:
+    void jalankan() {
+        bool berjalan = true;
+        while(berjalan) {
+            // ... (Menampilkan menu utama)
+            int pilihan;
+            cin >> pilihan;
+            // ... (Validasi input)
+            switch(pilihan) {
+                // ... (Memanggil fungsi-fungsi private)
+                case 0: berjalan = false; break;
+            }
+        }
+    }
+```
+
+Tujuan: Mengontrol alur utama aplikasi, menampilkan menu utama, dan menerima input dari pengguna untuk navigasi.<br>
+<ul>
+  <li><strong>Langkah-langkah Eksekusi:</strong>
+    <ul>
+      <li>Menginisialisasi <code>bool berjalan = true;</code> untuk mengontrol <code>while</code> loop.</li>
+      <li><strong>Loop Utama:</strong> Selama <code>berjalan</code> masih <code>true</code>, program akan terus:
+        <ul>
+          <li>Menampilkan menu utama kepada pengguna (<code>1. Cari Rute</code>, <code>2. Tampilkan Peta</code>, dll).</li>
+          <li>Menerima input pilihan dari pengguna.</li>
+          <li>Menggunakan <code>switch</code> statement untuk mengarahkan program ke fungsi <em>private</em> yang sesuai (<code>menuCariRute()</code>, <code>graf.tampilkanGraf()</code>, <code>menuManajemenData()</code>, dll).</li>
+          <li>Ketika pengguna memilih <code>"0"</code>, variabel <code>berjalan</code> akan diubah menjadi <code>false</code>, yang menyebabkan <code>while</code> loop berhenti dan program selesai.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3>2. Analisis Fungsi main()</h3>
+Fungsi main() adalah titik di mana sistem operasi mulai menjalankan program C++. Dalam program ini, main() dibuat sangat sederhana dan bersih, yang merupakan praktik baik dalam Pemrograman Berorientasi Objek.
+
+```cpp
+int main() {
+    Sistem aplikasi;
+    aplikasi.jalankan();
+    return 0;
+}
+```
+penjelasan : <br>
+<ul>
+  <li>
+    <strong>Sistem aplikasi;</strong>: Baris ini adalah hal pertama yang signifikan. Ini membuat sebuah instance atau objek dari Kelas <code>Sistem</code>. Saat baris ini dieksekusi, semua objek di dalam <code>Sistem</code> (yaitu <code>graf</code>, <code>pencari</code>, <code>pohonPreferensi</code>, dan <code>manajerFile</code>) juga ikut dibuat. Seluruh program kita kini terkandung dalam satu variabel bernama <code>aplikasi</code>.
+  </li>
+  <li>
+    <strong>aplikasi.jalankan();</strong>: Baris ini memanggil satu-satunya metode publik utama dari objek <code>aplikasi</code>. Panggilan ini akan memulai <em>main loop</em> di dalam fungsi <code>jalankan()</code> dan seluruh interaksi dengan pengguna dimulai dari sini.
+  </li>
+  <li>
+    <strong>return 0;</strong>: Menandakan bahwa program telah selesai dieksekusi dengan sukses.
+  </li>
+</ul>
 
 <h2 id="bagian7">7. Demonstrasi dan output</h2>
 <!-- Konten bagian 7 -->
