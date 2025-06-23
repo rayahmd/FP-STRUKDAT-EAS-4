@@ -278,8 +278,40 @@ Fungsi lalu akan mengecek apakah lokasi memiliki rute keluar atau tidak. Jika lo
 <h2 id="bagian4">4. bagian saha</h2>
 <!-- Konten bagian 4 -->
 
-<h2 id="bagian5">5. bagian saha</h2>
+<h2 id="bagian5">5. Class PreferredTree dan ManajerFile</h2>
 <!-- Konten bagian 5 -->
+Bab ini merinci bagian PreferredTree yang bertugas untuk memberikan output pada user berdasarkan rute yang dipilih. Terdapat tiga opsi rute yang dapat dipilih yaitu berdasarkan waktu tercepat, biaya termurah, dan jarak terpendek. Selain PreferredTree terdapat juga ManajerFile yang bertanggung jawab untuk membaca file CSV di dalam direktori code.  
+<br>
+<br>
+<h3> 1. Analisis PreferredTree </h3>  
+Class PreferredTree terdapat function JalankanPohon() yang dapat mengembalikan output berupa rute yang dapat dipilih berdasarkan input user.   
+
+```
+class PohonPreferensi {
+public:
+    string jalankanPohon() {
+        cout << "\nSilakan pilih preferensi rute Anda:\n";
+        cout << "1. Waktu Tercepat\n";
+        cout << "2. Biaya Termurah\n";
+        cout << "3. Jarak Terpendek\n";
+        cout << "Pilihan Anda: " << flush;
+        int pilihan;
+        cin >> pilihan;
+        switch(pilihan) {
+            case 1: return "waktu";
+            case 2: return "biaya";
+            case 3: return "jarak";
+            default:
+                cout << "Pilihan tidak valid. Menggunakan preferensi default (Waktu).\n";
+                return "waktu";
+        }
+    }
+};
+```
+Function JalankanPohon menggunakan switch case yang mana akan mengembalikan nilai berupa waktu apabila user menginput 1, biaya apabila user menginput 2, dan jarak apabila user menginput 3. Namun, apabila user memberikan input yang tidak sesuai akan mengembalikan waktu karena telah diset secara default.
+
+<h3> 2. Analisis ManajerFile </h3>  
+Class ini bertugas untuk membaca dan menyimpan data Graph dari file CSV. Terdapat beberapa function yaitu MuatDariCSV dan simpanKeCSV. MuatDariCSV bertugas untuk membaca file lokasi dan rute dari CSV untuk mengisi struktur graph dan simpanKeCSV yang dapat menyimpan data Graph ke File CSV, satu untuk lokasi dan satu untuk rute.  
 
 <h2 id="bagian6">6. Kelas Sistem dan main function</h2>
 <!-- Konten bagian 6 -->
