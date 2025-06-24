@@ -577,9 +577,6 @@ public:
 // FUNGSI UTAMA (MAIN)
 // ===================================================================
 int main() {
-    // Optimasi ini dinonaktifkan untuk memastikan kompatibilitas
-    // std::ios_base::sync_with_stdio(false);
-    // std::cin.tie(NULL);
 
     Sistem aplikasi;
     aplikasi.jalankan();
