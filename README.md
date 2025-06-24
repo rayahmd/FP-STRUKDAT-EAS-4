@@ -68,7 +68,7 @@ Penjelasan Tiap Library
 ```
 
 <h3> Kelas Rute</h3>
-Kelas Rute merepresentasikan edge dalam graf transportasi — sebuah jalur dari satu lokasi ke lokasi lainnya.
+Kelas Rute merepresentasikan sebuah jalur penghubung dari satu lokasi ke lokasi tujuan lainnya. Ia berisi data atribut dan method untuk mendapatkan informasi tersebut.
 
 Penjelasan Kelas Rute Berdasarkan Implementasi Kode 
 ```
