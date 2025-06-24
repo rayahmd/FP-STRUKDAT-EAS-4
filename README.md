@@ -3,6 +3,7 @@
 
 | Nama  | NRP |
 | ------------- | ------------- |
+| Ahmad Idza Anafin  | 5027241017 |
 | Zein Muhammad Hasan  | 5027241035 |
 | Raya Ahmad Syarif  | 5027241041  |
 | Aslam Ahmad Usman |  5027241074  |
@@ -13,7 +14,7 @@
   <li><a href="#bagian1">1. Pengantar Library dan Implementasi Kelas Rute</a></li>
   <li><a href="#bagian2">2. kelas graft dan fungsi-fungsinya (1)</a></li>
   <li><a href="#bagian3">3. kelas graft dan fungsi-fungsinya (2)</a></li>
-  <li><a href="#bagian4">4. bagian saha</a></li>
+  <li><a href="#bagian4">4. Class Algoritma Pencarian Rute (Dijkstra)</a></li>
   <li><a href="#bagian5">5. Kelas Pohon Preferensi & File Manager</a></li>
   <li><a href="#bagian6">6. Kelas Sistem dan main function</a></li>
   <li><a href="#bagian7">7. Demonstrasi dan output</a></li>
