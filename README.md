@@ -49,99 +49,75 @@ using namespace std;
 
 ```
 ```
+#include <iostream>     // Input dan output dasar (cout, cin)
+#include <string>       // Kelas string C++
+#include <vector>       // Struktur data vector untuk menyimpan list data
+#include <unordered_map>// Struktur map berbasis hash untuk menyimpan data key-value
+#include <queue>        // Struktur data queue dan priority_queue untuk implementasi Dijkstra
+#include <limits>       // Batas nilai numerik (numeric_limits) untuk mencari nilai infinity
+#include <algorithm>    // Fungsi-fungsi algoritma seperti sort() dan reverse()
+#include <fstream>      // Input dan output file untuk membaca/menulis file CSV
+#include <sstream>      // Stream untuk memproses string dalam file CSV
+#include <stdexcept>    // Exception handling untuk menangani error secara elegan
 
-Penjelasan Tiap Library
-| **Library**       | **Kegunaan dalam Kode Implementasinya**                                                                                                                                  | **Contoh dari Kode Implementasinya**                                                                                                            |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `<iostream>`      | Digunakan untuk mencetak teks ke layar dan membaca input dari user.                                                                                           | `cout << "INFO: Graf telah dibersihkan.\n";`                                                                                         |
-| `<string>`        | Digunakan untuk memanipulasi teks, misalnya nama lokasi.                                                                                                      | `class Lokasi { string nama; }` dan `getline(cin, nama);`                                                                            |
-| `<vector>`        | Digunakan untuk membuat list dinamis seperti `adjacencyList` dan path rute.                                                                                   | `unordered_map<int, vector<Rute>> adjacencyList;` dan `vector<int> path;`                                                            |
-| `<unordered_map>` | Digunakan untuk membuat dictionary agar bisa cari lokasi cepat berdasarkan `ID`.                                                                              | `unordered_map<int, Lokasi> daftarLokasi;`                                                                                           |
-| `<map>`           | Digunakan untuk membuat dictionary berurut (jika mau urut berdasarkan ID). Tidak banyak dipakai di kode ini, tapi sudah di-include untuk fitur di masa depan. | Tidak digunakan langsung di kode saat ini.                                                                                           |
-| `<queue>`         | Digunakan untuk antrian prioritas dalam Dijkstra.                                                                                                             | `priority_queue<Pair, vector<Pair>, greater<Pair>> pq;` di `PencariRute::cariRuteTerpendek()`                                        |
-| `<limits>`        | Digunakan untuk membuat nilai infinity sebagai jarak awal.                                                                                                    | `numeric_limits<double>::infinity()` di `PencariRute::cariRuteTerpendek()`                                                           |
-| `<algorithm>`     | Digunakan untuk memanipulasi list seperti hapus dan balik urutan list.                                                                                        | `remove_if(...)` di `Graf::hapusLokasi()` dan `reverse(hasil.path.begin(), hasil.path.end());` di `PencariRute::cariRuteTerpendek()` |
-| `<fstream>`       | Digunakan untuk membaca dan menulis file CSV.                                                                                                                 | `ifstream fileLok(fileLokasi); ofstream fileRut(fileRute);` di `ManajerFile`                                                         |
-| `<sstream>`       | Digunakan untuk memecah teks CSV menjadi bagian-bagian.                                                                                                       | `stringstream ss(line); getline(ss, idStr, ',');` di `ManajerFile::muatDariCSV()`                                                    |
-| `<utility>`       | Digunakan untuk membuat pasangan nilai, berguna dalam queue prioritas Dijkstra.                                                                               | `using Pair = pair<double, int>; pq.push({0.0, idAwal});` di `PencariRute::cariRuteTerpendek()`                                      |
 ```
+Semua library di atas adalah standard C++ library, sehingga dapat langsung digunakan tanpa perlu diunduh terlebih dahulu.
 
 <h3> Kelas Rute</h3>
-Kelas Rute merepresentasikan sebuah jalur penghubung dari satu lokasi ke lokasi tujuan lainnya. Ia berisi data atribut dan method untuk mendapatkan informasi tersebut.
+Kelas Rute berfungsi sebagai model data untuk merepresentasikan sebuah edge dalam graf. Setiap rute mempunyai:
+- idLokasiTujuan: Lokasi tujuan rute
+- jarak: Total jarak dari lokasi awal ke lokasi tujuan
+- waktu: Total waktu tempuh
+- biaya: Total biaya perjalanan
 
-Penjelasan Kelas Rute Berdasarkan Implementasi Kode 
+Penggunaan prinsip enkapsulasi membuat setiap atribut menjadi private agar hanya bisa diakses lewat method publik (getter). Selain itu terdapat method getBobot() untuk mengembalikan bobot sesuai preferensi rute.
+Berikut adalah kode implementasi kelas Rute:
 ```
 class Rute {
-public:
+private:
     int idLokasiTujuan;
     double jarak;
     double waktu;
     double biaya;
 
-    Rute(int tujuan, double jarak, double waktu, double biaya)
-        : idLokasiTujuan(tujuan), jarak(jarak), waktu(waktu), biaya(biaya) {}
+public:
+    // Konstruktor untuk inisialisasi
+    Rute(int tujuan, double j, double w, double b)
+        : idLokasiTujuan(tujuan), jarak(j), waktu(w), biaya(b) {}
 
-    double getBobot(const string& preferensi) const {
-        if (preferensi == "waktu") return waktu;
-        if (preferensi == "biaya") return biaya;
-        if (preferensi == "jarak") return jarak;
+    // Getter untuk setiap atribut
+    int getIdLokasiTujuan() const { return idLokasiTujuan; }
+    double getJarak() const { return jarak; }
+    double getWaktu() const { return waktu; }
+    double getBiaya() const { return biaya; }
+
+    // Method untuk mendapatkan bobot sesuai preferensi
+    double getBobot(PreferensiRute p) const {
+        if (p == PreferensiRute::Waktu) return waktu;
+        if (p == PreferensiRute::Biaya) return biaya;
+        if (p == PreferensiRute::Jarak) return jarak;
         return numeric_limits<double>::infinity();
     }
 };
 ```
-Penjelasan Baris per Baris
-1. Deklarasi dan Atribut
-```
-class Rute {
-public:
-    int idLokasiTujuan;
-    double jarak;
-    double waktu;
-    double biaya;
-```
-Apa fungsinya?
+Penjelasan
+Atribut:
 
-idLokasiTujuan: ID lokasi tujuan dari rute ini.
-→ Contohnya, kalau Anda membuat rute dari Lokasi 1 ke Lokasi 2, maka idLokasiTujuan = 2.
-jarak: Menyimpan jarak tempuh rute dalam satuan km.
-→ Digunakan kalau Anda mau mencari rute terpendek.
-waktu: Menyimpan durasi perjalanan dalam menit.
-→ Digunakan kalau Anda mau mencari rute tercepat.
-biaya: Menyimpan ongkos perjalanan dalam rupiah.
-→ Digunakan kalau Anda mau mencari rute termurah.
+- dLokasiTujuan: ID lokasi tujuan.
+- jarak, waktu, biaya: informasi numerik perjalanan menuju tujuan.
 
-2. Konstruktor
-```
-    Rute(int tujuan, double jarak, double waktu, double biaya)
-        : idLokasiTujuan(tujuan), jarak(jarak), waktu(waktu), biaya(biaya) {}
-```
-Apa fungsinya?
-Konstruktor ini membuat objek Rute baru.
+Enkapsulasi:
+- Semua atribut disembunyikan sebagai private agar data lebih terjaga integritasnya.
 
-3. getBobot() — Memilih Bobot Berdasarkan Preferensi
-```
-    double getBobot(const string& preferensi) const {
-        if (preferensi == "waktu") return waktu;
-        if (preferensi == "biaya") return biaya;
-        if (preferensi == "jarak") return jarak;
-        return numeric_limits<double>::infinity();
-    }
-```
-Apa fungsinya?
-Fungsi getBobot() digunakan untuk:
+Getter:
+- Digunakan untuk membaca nilai atribut.
 
-Memilih nilai bobot yang mau dihitung saat mencari rute, sesuai preferensi pengguna.
+getBobot() dimana digunakan agar algoritma Dijkstra bisa fleksibel bergantung preferensi rute:
+- Jika preferensi adalah Waktu, bobotnya adalah waktu.
+- Jika preferensi adalah Biaya, bobotnya adalah biaya.
+- Jika preferensi adalah Jarak, bobotnya adalah jarak.
+- Jika tidak cocok, mengembalikan infinity untuk menunjukkan bobot tak terhingga.
 
-Kalau preferensinya:
-- "waktu" → kembalikan waktu.
-- "biaya" → kembalikan biaya.
-- "jarak" → kembalikan jarak.
-
-Kesimpulan untuk Kelas Rute
-Kelas Rute adalah struktur data utama untuk merepresentasikan satu edge (jalur) dalam graf:
-- Anda bisa tahu menuju ke mana rute ini (idLokasiTujuan).
-- Anda bisa tahu atribut-atributnya (jarak, waktu, biaya).
-- Anda bisa memilih bobot sesuai kebutuhan lewat getBobot() — berguna banget dalam algoritma Dijkstra.
 
 <h2 id="bagian2">2.  kelas graft dan fungsi-fungsinya (1) </h2>
 
