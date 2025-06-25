@@ -38,16 +38,15 @@ Library dalam pemrograman adalah Kumpulan kode (fungsi, kelas, modul) yang sudah
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <map>
 #include <queue>
 #include <limits>
 #include <algorithm>
 #include <fstream>
 #include <sstream>
-#include <utility>
+#include <stdexcept>
 
-// Menggunakan namespace std untuk menghindari penulisan std:: berulang kali
 using namespace std;
+
 ```
 ```
 
